@@ -14,11 +14,12 @@ const App: FC = () => {
   const [Notes, setNotes] = useState<INotes[]>([]);
   const [filteredNotes, setFilteredNotes] = useState<INotes[]>([]);
   const [tags, setTags] = useState<string[]>([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [title, setTitle] = useState<string>("");
   const [edit, setEdit] = useState<string>("");
   const [tag, setTag] = useState("");
   const [addedTags, setAddedTags] = useState(false);
-  const [addColor, setAddColor] = useState<string>("#122");
+  const [addColor, setAddColor] = useState<string>("rgb(17, 17, 34)");
   useEffect((): void => {
     let Notes = JSON.parse(localStorage.getItem("Notes") || "[]");
     if (Notes) {
@@ -91,18 +92,23 @@ const App: FC = () => {
       setTags([]);
     }
   };
+  const tagsX: string[] = [];
   const filtrByTags = (tag: string): void => {
-    const notesToAdd = Notes.filter((note) => note.tags.includes(tag));
+    const updatedSelectedTags = !selectedTags.includes(tag)
+      ? [...selectedTags, tag]
+      : selectedTags.filter((t) => t !== tag);
 
-    setFilteredNotes([...filteredNotes, ...notesToAdd]);
-    setAddedTags(true);
-    filteredNotes.map((note) => {
-      if (note.id !== tag) {
-        setAddedTags(false);
-        setFilteredNotes(filteredNotes.slice(0, 0));
-      }
+    setSelectedTags(updatedSelectedTags);
+
+    const notesToAdd = Notes.filter((note) => {
+      return note.tags.some((noteTag) => updatedSelectedTags.includes(noteTag));
     });
+    console.log(notesToAdd);
+
+    setFilteredNotes([...notesToAdd]);
   };
+
+  console.log(selectedTags);
 
   const DeleteTd = (id: string): void => {
     setNotes(
@@ -218,21 +224,23 @@ const App: FC = () => {
                 editTd={editTd}
                 edit={edit}
                 setEdit={setEdit}
-                addedTags={addedTags}
+                filteredNotes={filteredNotes}
+                selectedTags={selectedTags}
               />
             ))
           ) : (
             Notes.map((products, index) => (
               <Todo
                 key={index}
+                filteredNotes={filteredNotes}
                 products={products}
                 DeleteTd={DeleteTd}
                 completedTd={completedTd}
                 filtrByTags={filtrByTags}
                 editTd={editTd}
                 edit={edit}
+                selectedTags={selectedTags}
                 setEdit={setEdit}
-                addedTags={!!addedTags}
               />
             ))
           )

@@ -1,7 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, useState } from "react";
 import { INotes } from "../Interface";
 
-interface Props {
+interface IToDoProps {
   products: INotes;
   edit: string;
   setEdit: Dispatch<SetStateAction<string>>;
@@ -9,10 +9,11 @@ interface Props {
   completedTd(id: string): void;
   editTd(id: string): void;
   filtrByTags(tag: string): void;
-  addedTags: boolean;
+  selectedTags: string[];
+  filteredNotes: INotes[];
 }
 
-const Todo: FC<Props> = ({
+const Todo: FC<IToDoProps> = ({
   products,
   edit,
   setEdit,
@@ -20,7 +21,8 @@ const Todo: FC<Props> = ({
   completedTd,
   editTd,
   filtrByTags,
-  addedTags,
+  selectedTags,
+  filteredNotes,
 }) => {
   const [editingOpen, setEditingOpen] = useState<boolean>(false);
 
@@ -62,7 +64,7 @@ const Todo: FC<Props> = ({
         <ul>
           {products.tags.map((tag, index) => (
             <li
-              className={addedTags ? "filtredTags" : ""}
+              className={selectedTags.includes(tag) ? "filtredTags" : ""}
               style={{ paddingLeft: tag.length }}
               key={index}
               title="To filter tags click on the tag"
