@@ -1,8 +1,12 @@
 Technologies Used
 Vite.js - A build tool that focuses on providing the best development experience.
+
 React.js + TypeScript - A powerful combination for building user interfaces with type safety.
+
 Sass (SCSS) - A CSS preprocessor that enhances the capabilities of CSS.
+
 react-toastify - A library for displaying toast notifications in React applications.
+
 localStorage - Web storage that allows you to store todos in a web browser.
 
 *Installation:
